@@ -1,6 +1,6 @@
 function [coRoute, TMCnames, linkList] = routeXMLparser(fileName)
 
-% fileName = './AB1/route.xml';
+% fileName = './AB1/route.xml';     % default file name
 fid = fopen(fileName, 'r');
 fileText = fread(fid, 'uint8=>char')';
 ST = fclose(fid);

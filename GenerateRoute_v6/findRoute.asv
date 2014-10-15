@@ -124,10 +124,10 @@ else
         viaPoints = [];
         return;
     
-    % Match not successful, have another try by add some new via points
+    % Match not successful, have another try by add some new viapoint
     else
         viaPointsLocation = unique(sort([viaPointsLocation;addViapointsLocation]));
-        %# viaPointsLocation(viaPointsLocation<10) = [];
+        %viaPointsLocation(viaPointsLocation<10) = [];
         [viaPointsLocation] = clearViapointsInSameLinks(viaPointsLocation,tripTrace,desktopPath);
         pointsVector = [Origin;Dest;[tripTrace(viaPointsLocation,1),tripTrace(viaPointsLocation,2)]];
         tempFlag=callADASRP(pointsVector);
