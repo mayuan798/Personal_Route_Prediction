@@ -9,14 +9,15 @@
 %Date: 8/20/2014
 %#########################################################################
 
-%% Initial parameters
+%% Read the configuration file and Initialize parameters
 clear;clc;
 ini = IniConfig();
 ini.ReadFile('configuration.ini');
 % The folder path wehre store the temp data
-folderPath=ini.GetValues('Path Setting', 'FOLDER_PATH');
-DirF = dir(folderPath);         % List all the files and folders (structure)
-len=length(DirF);               % Calcluate how many files/folders are there in total
+FolderPath = ini.GetValues('Path Setting', 'FOLDER_PATH');
+DesktopPath = ini.GetValues('Path Setting', 'DESKTOP_PATH');
+DirF = dir(FolderPath); % List all the files and folders (structure)
+len=length(DirF);   % Calcluate how many files/folders are there in total
 
 %% Traverse all files in the folder and process each trip file
 for i=3:len                     % ignore './' and '../'
@@ -24,14 +25,14 @@ for i=3:len                     % ignore './' and '../'
     %[filename, pathname, filterindex] = uigetfile('*.mat', 'Pick a MATLAB code file');
     filename = DirF(i).name;
     fprintf(['Processing file:' filename '\n']);
-    load([folderPath '\' DirF(i).name]);            % load .mat trip data (structure only contains 'trip')
+    load([FolderPath DirF(i).name]);            % load .mat trip data (structure only contains 'trip')
     log = trip.Location.Longitude;                  % get a list of points' lognitude
     lat = trip.Location.Latitude;                   % get a list of points' latitude
     if(length(log)~=length(lat))                    % ignore the trip data where the size of lognitude is not equal to that of latitude
         continue;
     end
     %%
-    [coRoute,linkList,TMCnames,indicator,viaPoints] = findRoute(trip,'C:\Users\Xipeng1990\Desktop\');
+    [coRoute,linkList,TMCnames,indicator,viaPoints] = findRoute(trip, DesktopPath);
     %%
     log = trip.Location.Longitude;
     lat = trip.Location.Latitude;

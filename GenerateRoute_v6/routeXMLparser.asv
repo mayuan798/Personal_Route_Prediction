@@ -1,9 +1,5 @@
 function [coRoute, TMCnames, linkList] = routeXMLparser(fileName)
-%##########################################################################
 
-%##########################################################################
-
-%%
 % fileName = './AB1/route.xml';     % default file name
 [fid, message] = fopen(fileName, 'r');
 if fid < 0
@@ -11,8 +7,9 @@ if fid < 0
   fileText = [];
 else
   fileText = fread(fid, 'uint8=>char')';
-  ST = fclose(fid);
 end
+
+ST = fclose(fid);
 
 rst = regexp(fileText, '<item>\s\s\s\s\s<PermanentId>');
 linkCnt = size(rst, 2);

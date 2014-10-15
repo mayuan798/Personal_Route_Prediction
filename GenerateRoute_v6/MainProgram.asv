@@ -9,15 +9,15 @@
 %Date: 8/20/2014
 %#########################################################################
 
-%% Initial parameters
+%% Read the configuration file and Initialize parameters
 clear;clc;
 ini = IniConfig();
 ini.ReadFile('configuration.ini');
-ini.GetValues('Path Setting', 'FOLDER_PATH');
-
-folderPath='./tempData';        % The folder path wehre store the temp data
-DirF = dir(folderPath);         % List all the files and folders (structure)
-len=length(DirF);               % Calcluate how many files/folders are there in total
+% The folder path wehre store the temp data
+folderPath=ini.GetValues('Path Setting', 'FOLDER_PATH');
+desktopPath =
+DirF = dir(folderPath); % List all the files and folders (structure)
+len=length(DirF);   % Calcluate how many files/folders are there in total
 
 %% Traverse all files in the folder and process each trip file
 for i=3:len                     % ignore './' and '../'
