@@ -1,29 +1,38 @@
 function [newRoute,addViapointsLocation,indicator] = Matching(tripData,routeData,threhold)
 %#########################################################################
+%Description:
 %This program is used to check if the trip and route is matched or not
+
 %input:
     %tripData 1:logtitude 2:latitude
     %routeData 1:logtitude 2:latitude 
+    
 %Output:
-    %indicator: 0: some parts are matched 1: matched 2:totally no match 
+    %indicator:
+    % 0: some parts are matched
+    % 1: matched
+    % 2: totally no match 
 
 %Author: Xipeng Wang
 %Contact: xipengw1990@gmail.com
 %Date: 8/20/2014
 %#########################################################################
 
-roadW = 15E-3;%roadWidth
+roadW = 15E-3;                  %roadWidth
 routeShPdist = zeros(length(routeData(:,1))-1,1);
 minDist = zeros(length(routeData(:,1))-1,1);
 maxDist = zeros(length(routeData(:,1))-1,1);
+
 for i=1:length(routeData(:,1))-1
     routeShPdist(i) = pos2dist(routeData(i,1),routeData(i,2),routeData(i+1,1),routeData(i+1,2));
     maxDist(i) = 2*sqrt(roadW^2 + (routeShPdist(i)/2)^2);
     minDist(i) = sqrt(roadW^2+(routeShPdist(i))^2);
 end
+
 DistCell = cell(1,length(tripData(:,1)),1);
 RouteLabel = zeros(length(routeData(:,1))-1,1);
 label = zeros(length(tripData(:,1)),1);
+
 for i=1:length(DistCell)
     tempDist = [];
     for j=1:length(routeData(:,1))
@@ -36,7 +45,9 @@ for i=1:length(DistCell)
     end
     DistCell{i} = tempDist;
 end
+
 newRoute = routeData(RouteLabel==1,:);
+
 if(sum(label)==0)
     indicator = 2; %totally no match
     addViapointsLocation = [];
