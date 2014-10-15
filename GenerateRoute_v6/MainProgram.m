@@ -11,7 +11,10 @@
 
 %% Initial parameters
 clear;clc;
-folderPath='./tempData';        % The folder path wehre store the temp data
+ini = IniConfig();
+ini.ReadFile('configuration.ini');
+% The folder path wehre store the temp data
+folderPath=ini.GetValues('Path Setting', 'FOLDER_PATH');
 DirF = dir(folderPath);         % List all the files and folders (structure)
 len=length(DirF);               % Calcluate how many files/folders are there in total
 
