@@ -59,34 +59,14 @@ tempIdx = (trip.Movement.GPSSpeed > speedThrehold);
 % data
 tripTrace = [trip.Location.Latitude(tempIdx), ...
              trip.Location.Longitude(tempIdx)];
-         
-%% not be used right now
-% [tempIdx,tempValue] = min(find(trip.Accuracy.Accuracy(tempIdx) == 0));
-% tripTrace = [tripTrace(1,:);tripTrace(tempIdx:end,:)];
 
-% debug code
-%tripTrace(1:30,:) = [];
-%
+fileID = fopen('tripdata.dat','w');
+formatSpec = '%2.6f \t %2.6f\n';
 
-%% Generate the coRoute
-Origin = [tripTrace(1,1),tripTrace(1,2)];      % Geoposition of Origin
-Dest = [tripTrace(end,1),tripTrace(end,2)];    % Geoposition of Destination         
-
-for i = 1:length(tripTrace)
-    i
-    Trip_Point = [tripTrace(i,1),tripTrace(i,2)];
-   
-    flag = callADASRP(Trip_Point);          % call ADASRP and get r
-    try
-        [shapePoints, TMCname, LinkInfo] = routeXMLparser(XmlFileName);
-    catch
-        return;
-    end
-
-    if ( isempty(Link_Info_List) || ~isequal(Link_Info_List(end,:), LinkInfo) )
-        LinkInfo
-        Link_Info_List = [Link_Info_List; LinkInfo];
-        TMC_name_List = [TMC_name_List; TMCname];
-        coRoute = [coRoute; shapePoints];
-    end
+[nrows, ncols] = size(tripTrace);
+for row = 1:nrows
+    fprintf(fileID,formatSpec, tripTrace(row,:));
 end
+fclose(fileID);
+type tripdata.dat
+%%

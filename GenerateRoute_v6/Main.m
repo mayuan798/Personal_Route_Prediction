@@ -43,7 +43,7 @@ for i=3:len                     % ignore './' and '../'
     Link_Info_List = [];
     trip
     findRoute(trip);
-    save(['./saveData/' filename(1:end-12) '.mat'],'coRoute','Link_Info_List','TMC_name_List','trip');
+    %save(['./saveData/' filename(1:end-12) '.mat'],'coRoute','Link_Info_List','TMC_name_List','trip');
 end
 
-delete(XmlFileName, CsvFileName);
+%delete(XmlFileName, CsvFileName);
