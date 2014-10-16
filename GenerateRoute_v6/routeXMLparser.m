@@ -5,15 +5,18 @@ function [coRoute, TMCnames, linkList] = routeXMLparser(fileName)
 
 %%
 % fileName = './AB1/route.xml';     % default file name
+
+% Check if the .xml file has generated
 [fid, message] = fopen(fileName, 'r');
 if fid < 0
   disp(message);
   fileText = [];
 else
   fileText = fread(fid, 'uint8=>char')';
-  ST = fclose(fid);
+  ST = fclose(fid); % Why need 'ST' here?
 end
 
+% Use regexp function to extract infomation contained in tags
 rst = regexp(fileText, '<item>\s\s\s\s\s<PermanentId>');
 linkCnt = size(rst, 2);
 linkList = cell(linkCnt, 9);
@@ -138,7 +141,7 @@ end
 
 %% get road type
 coRoute(:,4) = 1; % mark all as local
-pst = find(coRoute(:,10)<=1); % functional class <= 1
+pst = find(coRoute(:,10) <= 1); % functional class <= 1
 coRoute(pst,4) = 3; % freeway
 
 try

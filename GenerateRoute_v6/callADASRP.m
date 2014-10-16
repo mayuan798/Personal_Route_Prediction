@@ -1,4 +1,4 @@
-function [flag] = callADASRP(pointsVector)
+function [flag] = callADASRP(point)
 %#########################################################################
 %This program is used to call the ADASRP ford-Plugin software
 %input:
@@ -9,16 +9,11 @@ function [flag] = callADASRP(pointsVector)
 %Date: 8/20/2014
 %#########################################################################
 
-Origin = [num2str(pointsVector(1,1),'% .7f') ' ' num2str(pointsVector(1,2),'% .7f')];
-Dest = [num2str(pointsVector(2,1),'% .7f') ' ' num2str(pointsVector(2,2),'% .7f')];
-vias = ' ';
-if(length(pointsVector(:,1))>2)
-    for i=3:length(pointsVector(:,1))
-        vias = [vias num2str(pointsVector(i,1),'% .7f') ' ' num2str(pointsVector(i,2),'% .7f') ' '];
-    end
-end  
+Origin = [num2str(point(1,1),'% .7f') ' ' num2str(point(1,2),'% .7f')];
+Dest = Origin;
+
 try
-    system(['Route.exe 127.0.0.1 6543 -o ' Origin ' ' Dest vias]);
+    system(['Route.exe 127.0.0.1 6543 -o ' Origin ' ' Dest]);
 catch me
     flag = 0;
     return;
