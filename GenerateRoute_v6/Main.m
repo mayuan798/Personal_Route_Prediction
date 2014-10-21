@@ -10,14 +10,14 @@
 %#########################################################################
 
 %% Read the configuration file and Initialize parameters
-clear all; clc;
+clear all; clc; tic;
 ini = IniConfig();
 ini.ReadFile('configuration.ini');
-% The folder path wehre store the temp data
 
 global Folder_Path Desktop_Path XmlFileName CsvFileName
 global coRoute TMC_name_List Link_Info_List
 
+% The folder path wehre store the temp data
 Folder_Path = ini.GetValues('Path Setting', 'FOLDER_PATH');
 Desktop_Path = ini.GetValues('Path Setting', 'DESKTOP_PATH');
 DirF = dir(Folder_Path); % List all the files and folders (structure)
