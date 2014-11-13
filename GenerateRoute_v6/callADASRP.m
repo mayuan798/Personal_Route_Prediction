@@ -1,4 +1,4 @@
-function [flag] = callADASRP(point)
+function [flag] = callADASRP()
 %#########################################################################
 %This program is used to call the ADASRP ford-Plugin software
 %input:
@@ -9,8 +9,6 @@ function [flag] = callADASRP(point)
 %Date: 8/20/2014
 %#########################################################################
 
-Origin = [num2str(point(1,1),'% .7f') ' ' num2str(point(1,2),'% .7f')];
-Dest = Origin;
 
 try
     system(['Route.exe 127.0.0.1 6543 -o ' Origin ' ' Dest]);

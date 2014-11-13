@@ -38,10 +38,6 @@ function findRoute(trip)
 %Date: 08/20/2014
 %#########################################################################
 
-%% Initialize globle variables
-global XmlFileName
-global coRoute TMC_name_List Link_Info_List
-
 %% Check trip data
 % check and filter out the trip data whose data point is less than 500
 if(length(trip.Location.Time)<500)
@@ -68,5 +64,4 @@ for row = 1:nrows
     fprintf(fileID,formatSpec, tripTrace(row,:));
 end
 fclose(fileID);
-type tripdata.dat
 %%

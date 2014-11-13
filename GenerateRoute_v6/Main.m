@@ -2,11 +2,11 @@
 %Description: This program is used to generate route information from a
 %             recorded trip. Route information includes link and shape 
 %             point info
-%Author: Xipeng Wang
-%Contact: xipengw1990@gmail.com
-%Version: 6
+%Author: Yuan Ma
+%Contact: myuan@umich.edu
+%Version: 0.9
 %Copyright: University of Michigan Dearborn
-%Date: 8/20/2014
+%Date: 11/13/2014
 %#########################################################################
 
 %% Read the configuration file and Initialize parameters
@@ -14,17 +14,12 @@ clear all; clc; tic;
 ini = IniConfig();
 ini.ReadFile('configuration.ini');
 
-global Folder_Path Desktop_Path XmlFileName CsvFileName
-global coRoute TMC_name_List Link_Info_List
-
 % The folder path wehre store the temp data
 Folder_Path = ini.GetValues('Path Setting', 'FOLDER_PATH');
-Desktop_Path = ini.GetValues('Path Setting', 'DESKTOP_PATH');
 DirF = dir(Folder_Path); % List all the files and folders (structure)
-len=length(DirF);   % Calcluate how many files/folders are there in total
-XmlFileName = [Desktop_Path 'route.xml'];
-CsvFileName = [Desktop_Path 'route.csv'];
+len = length(DirF);   % Calcluate how many files/folders are there in total
 
+tic;
 %% Traverse all files in the folder and process each trip file
 for i=3:len                     % ignore './' and '../'
     %try
@@ -38,12 +33,46 @@ for i=3:len                     % ignore './' and '../'
         continue;
     end
     
-    coRoute = [];
-    TMC_name_List = [];
-    Link_Info_List = [];
-    trip
-    findRoute(trip);
-    %save(['./saveData/' filename(1:end-12) '.mat'],'coRoute','Link_Info_List','TMC_name_List','trip');
-end
+    TMCnames = [];
+    linkList = [];
+    coRoute  = [];
+    
+    %% Check trip data
+    % check and filter out the trip data whose data point is less than 500
+    if(length(trip.Location.Time)<500)
+        return;
+    end
+    % check and filter out the point whose recorded time less than 10 minutes
+    if((trip.Location.Time(end))<10*60)
+        return;
+    end
 
-%delete(XmlFileName, CsvFileName);
+    %% Pre-process trip, filter our low speed point
+    speedThrehold = 3;
+    tempIdx = (trip.Movement.GPSSpeed > speedThrehold);
+    % tripTrace is the list contains all points that will be used in this trip
+    % data
+    tripTrace = [trip.Location.Latitude(tempIdx), ...
+                 trip.Location.Longitude(tempIdx)];
+
+    fileID = fopen('tripdata.dat','w');
+    formatSpec = '%2.6f \t %2.6f\n';
+
+    [nrows, ncols] = size(tripTrace);
+    for row = 1:nrows
+        fprintf(fileID,formatSpec, tripTrace(row,:));
+    end
+    fclose(fileID);
+    
+    try
+        system('run.bat');
+    catch me
+        disp('Can not call ADASRP');
+        flag = 0;
+        return;
+    end 
+    
+    coRoute = post_processing('tripdata.csv');
+    save(['./saveData/yuanma_' filename(1:end-12) '.mat'],'coRoute','linkList','TMCnames', 'trip');
+end
+toc;
